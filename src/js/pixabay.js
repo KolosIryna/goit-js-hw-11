@@ -12,8 +12,8 @@ async function imgParams(value, page) {
     //   min_height: '300px',
       orientation: 'horizontal',
       safesearch: true,
-    //   per_page: 40,
-    //   page: page,
+      per_page: 20,
+      page: page,
     };
     return await axios.get(URL);
 }
