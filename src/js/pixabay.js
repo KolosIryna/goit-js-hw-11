@@ -15,7 +15,7 @@ async function imgParams(value, page) {
     //   per_page: 40,
     //   page: page,
     };
-    return await axios.get(${URL});
+    return await axios.get(URL);
 }
 
 export {imgParams};
