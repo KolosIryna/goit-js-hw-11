@@ -65,6 +65,7 @@ function showNoImagesMessage() {
 function isLastPage() {
   return totalImg <= page * perPage;
 }
+
 function checkLastPage() {
   if (isLastPage()) {
     buttonLoadMore.classList.add('is-hidden');
