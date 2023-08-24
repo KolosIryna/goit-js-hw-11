@@ -6,7 +6,6 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const form = document.querySelector('.search-form');
-const btnSubmit = document.querySelector('button');
 const gallery = document.querySelector('.gallery');
 const buttonLoadMore = document.querySelector('.load-more');
 
@@ -19,7 +18,7 @@ const lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
-//Шаблон розмітки картки одного зображення для галереї
+
 function cardMarking(arr) {
   return arr
     .map(
@@ -56,7 +55,7 @@ function cardMarking(arr) {
     .join(' ');
 }
 
-function onError() {
+function showNoImagesMessage() {
   Notiflix.Report.failure(
     'Opss',
     'Sorry, there are no images matching your search query. Please try again.'
@@ -64,9 +63,8 @@ function onError() {
 }
 
 function isLastPage() {
-  return totalImg === page;
+  return totalImg <= page * perPage;
 }
-
 function checkLastPage() {
   if (isLastPage()) {
     buttonLoadMore.classList.add('is-hidden');
@@ -82,7 +80,7 @@ async function loadImages() {
     const data = await imgParams(searchValue, page);
 
     if (data.hits.length === 0) {
-      onError();
+      showNoImagesMessage();
       return;
     }
 
@@ -95,6 +93,10 @@ async function loadImages() {
     page += 1;
 
     checkLastPage();
+
+    if (page === 2) {
+      buttonLoadMore.classList.remove('is-hidden');
+    }
   } catch (error) {
     console.error('Error loading images:', error);
   }
@@ -108,4 +110,7 @@ form.addEventListener('submit', event => {
   buttonLoadMore.classList.add('is-hidden');
 });
 
-buttonLoadMore.addEventListener('click', loadImages);
+buttonLoadMore.addEventListener('click', () => {
+  loadImages();
+  buttonLoadMore.classList.add('is-hidden');
+});
