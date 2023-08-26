@@ -62,16 +62,18 @@ function showNoImagesMessage() {
   );
 }
 
-function isLastPage() {
-  return totalImg <= page * perPage;
+function isLastPage(data) {
+  return data.hits.length < perPage;
 }
 
-function checkLastPage() {
-  if (isLastPage()) {
+function checkLastPage(data) {
+  if (isLastPage(data)) {
     buttonLoadMore.classList.add('is-hidden');
     Notiflix.Notify.warning(
       "We're sorry, but you've reached the end of search results."
     );
+  } else {
+    buttonLoadMore.classList.remove('is-hidden');
   }
 }
 
@@ -93,11 +95,22 @@ async function loadImages() {
     totalImg = data.totalHits;
     page += 1;
 
-    checkLastPage();
+    showTotalImagesMessage(totalImg);
+
+    checkLastPage(data);
 
     if (page === 2) {
       buttonLoadMore.classList.remove('is-hidden');
     }
+    // прокручування сторінки
+    // const { height: cardHeight } = document
+    //   .querySelector('.gallery')
+    //   .firstElementChild.getBoundingClientRect();
+
+    // window.scrollBy({
+    //   top: cardHeight * 2,
+    //   behavior: 'smooth',
+    // });
   } catch (error) {
     console.error('Error loading images:', error);
   }
@@ -107,11 +120,16 @@ form.addEventListener('submit', event => {
   event.preventDefault();
   gallery.innerHTML = '';
   page = 1;
+  totalImg = 0;
   loadImages();
   buttonLoadMore.classList.add('is-hidden');
 });
 
 buttonLoadMore.addEventListener('click', () => {
   loadImages();
-  buttonLoadMore.classList.add('is-hidden');
+  buttonLoadMore.classList.remove('is-hidden');
 });
+
+function showTotalImagesMessage(totalImg) {
+  Notiflix.Notify.info(`Hooray! We found ${totalImg} images.`);
+}

@@ -14,9 +14,9 @@ body {
   padding-right: 15px;
 }
 
-/* .is-hidden {
+.is-hidden {
   display: none;
-} */
+}
 
 .search-form {
   display: flex;
@@ -53,4 +53,11 @@ img {
   justify-content: center;
   align-items: center;
   gap: 24px;
+}
+
+.load-more {
+  margin: auto;
+  min-width: 160px;
+  height: 46px;
+  background-color: aquamarine;
 }
